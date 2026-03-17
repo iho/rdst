@@ -9,6 +9,7 @@ from typing import Any, AsyncGenerator, Dict, List, Optional, Sequence
 
 from .base import LLMDefaults, LLMError, Provider, ProviderRequest, ProviderResponse
 from .claude_provider import ClaudeProvider
+from .ollama_provider import OllamaProvider
 
 
 class LLMManager:
@@ -38,7 +39,8 @@ class LLMManager:
     ):
         d = LLMDefaults(**(defaults or {}))
 
-        # Load model from config file if set
+        # Load model and provider from config file if set
+        llm_config: Dict[str, Any] = {}
         try:
             from ..cli.rdst_cli import TargetsConfig
 
@@ -46,7 +48,6 @@ class LLMManager:
             config.load()
             llm_config = config.get_llm_config()
 
-            # Only model can be overridden from config (provider is always Claude)
             if llm_config.get("model"):
                 d.model = llm_config["model"]
 
@@ -54,21 +55,23 @@ class LLMManager:
         except Exception:
             self._config = None
 
-        # Environment variable takes precedence for model
+        # Environment variable takes precedence for model (Claude)
         env_model = os.getenv("RDST_ANTHROPIC_MODEL")
         if env_model:
             d.model = env_model
 
-        # Provider is always Claude (BYOK)
-        d.provider = "claude"
+        # Determine provider: env > config > default (claude)
+        env_provider = os.getenv("RDST_LLM_PROVIDER")
+        configured_provider = llm_config.get("provider")
+        d.provider = env_provider or configured_provider or "claude"
 
         self.defaults = d
         self.logger = logger or logging.getLogger("llm_manager")
         self.logger.addHandler(logging.NullHandler())
 
-        # Claude is the only provider
         self._providers: Dict[str, Provider] = {}
         self.register_provider("claude", ClaudeProvider())
+        self.register_provider("ollama", OllamaProvider())
 
     # Provider registry
     def register_provider(self, name: str, provider: Provider) -> None:
@@ -78,7 +81,7 @@ class LLMManager:
         p = (name or self.defaults.provider or "claude").lower()
         if p not in self._providers:
             raise LLMError(
-                f"Unknown provider '{p}'. RDST only supports Claude.",
+                f"Unknown provider '{p}'. Supported providers: claude, ollama.",
                 code="NO_SUCH_PROVIDER",
             )
         return self._providers[p]
@@ -361,8 +364,13 @@ class LLMManager:
         """Resolve API key and routing (direct vs trial proxy).
 
         Returns KeyResolution with api_key, routing info, and attestation headers.
+        For local providers like Ollama, returns a no-key resolution immediately.
         """
-        from .key_resolution import resolve_api_key
+        from .key_resolution import KeyResolution, resolve_api_key
+
+        if provider == "ollama":
+            return KeyResolution(api_key="not-needed", is_trial=False)
+
         return resolve_api_key()
 
 
