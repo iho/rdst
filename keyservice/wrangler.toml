@@ -1,0 +1,14 @@
+name = "rdst-keyservice"
+main = "src/index.py"
+compatibility_date = "2025-11-02"
+compatibility_flags = ["python_workers", "python_dedicated_snapshot"]
+account_id = "9c1f22df9746400e4bd69f2e52447672"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "rdst-keyservice-db"
+database_id = "e0fa247a-934c-4930-be8d-993dfdae69ec"
+
+[vars]
+PROXY_TARGET = "https://api.anthropic.com"
+TRIAL_LIMIT_CENTS = "500"

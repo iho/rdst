@@ -1,0 +1,8 @@
+{
+  "commit": "fd3cb916dd92bb744231a6631e321324c5fcf60f",
+  "frontend_version": "fd3cb916dd92bb744231a6631e321324c5fcf60f",
+  "bundle_sha256": "776112a2401e4d5b135ff9c9e1e4da839ff7c5506c677f7476834d69642dabcc",
+  "bundle_format": "tar.gz",
+  "bundle_root": ".",
+  "built_at": "2026-03-12T19:21:03Z"
+}

@@ -1,0 +1,14 @@
+# Vendored Python packages (Cloudflare Workers requirement)
+python_modules/
+
+# Wrangler local dev state
+.wrangler/
+
+# Python virtual environment
+.venv/
+
+# UV lock file
+uv.lock
+
+# Local dev secrets
+.dev.vars

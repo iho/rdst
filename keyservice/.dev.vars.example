@@ -1,0 +1,7 @@
+# Copy to .dev.vars and fill in real values for local development
+# wrangler dev reads these automatically
+
+ANTHROPIC_API_KEY=sk-ant-your-key-here
+RESEND_API_KEY=re_your-resend-key-here
+ADMIN_SECRET=your-admin-secret-here
+ATTESTATION_SECRET=your-attestation-secret-here

@@ -1,0 +1,169 @@
+Metadata-Version: 2.4
+Name: rdst
+Version: 0.1.562
+Summary: Readyset Data and SQL Toolkit - CLI tool for database diagnostics and query optimization
+Project-URL: Homepage, https://readyset.io
+Project-URL: Documentation, https://docs.readyset.io
+Project-URL: Repository, https://github.com/readysettech/readyset
+Project-URL: Issues, https://github.com/readysettech/readyset/issues
+Project-URL: Changelog, https://github.com/readysettech/readyset/releases
+Author-email: Readyset <support@readyset.io>
+License: MIT
+License-File: LICENSE
+Keywords: caching,database,diagnostics,optimization,performance,readyset,sql
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Database
+Classifier: Topic :: Software Development :: Testing
+Requires-Python: >=3.10
+Requires-Dist: anthropic>=0.76.0
+Requires-Dist: boto3
+Requires-Dist: fastapi-ai-sdk>=0.1.0
+Requires-Dist: fastapi>=0.115.0
+Requires-Dist: keyring>=25.0.0
+Requires-Dist: pandas
+Requires-Dist: posthog
+Requires-Dist: psycopg2-binary
+Requires-Dist: pygments
+Requires-Dist: pymysql
+Requires-Dist: pyyaml
+Requires-Dist: requests==2.31.0
+Requires-Dist: rich
+Requires-Dist: sqlglot
+Requires-Dist: sqlparse
+Requires-Dist: sse-starlette>=2.0.0
+Requires-Dist: toml
+Requires-Dist: uvicorn[standard]>=0.32.0
+Provides-Extra: agent
+Requires-Dist: aiohttp>=3.9.0; extra == 'agent'
+Provides-Extra: slack
+Requires-Dist: slack-bolt>=1.18.0; extra == 'slack'
+Requires-Dist: slack-sdk>=3.21.0; extra == 'slack'
+Description-Content-Type: text/markdown
+
+# RDST - Readyset Data and SQL Toolkit
+
+A command-line tool for database diagnostics, query analysis, performance tuning, and caching optimization with Readyset.
+
+## What is RDST?
+
+RDST helps you:
+- Analyze SQL queries for caching opportunities
+- Identify slow queries in real-time
+- Get optimization suggestions
+- Evaluate query compatibility with Readyset cache
+- Manage database connection profiles
+
+## Installation
+
+### Using uvx (recommended - no installation required)
+
+Run RDST directly without installing:
+
+```bash
+uvx rdst --help
+uvx rdst analyze "SELECT * FROM users WHERE id = 1"
+```
+
+### Using pipx (persistent installation)
+
+Install globally:
+
+```bash
+# Install
+pipx install rdst
+
+# Run
+rdst --help
+
+# Upgrade to latest version
+pipx upgrade rdst
+```
+
+### Using pip
+
+```bash
+pip install rdst
+```
+
+> **After installing**, run `rdst init` to configure your first database connection.
+
+## Quick Start
+
+1. **Initialize RDST:**
+   ```bash
+   rdst init
+   # Or with uvx (no installation needed):
+   uvx rdst init
+   ```
+
+2. **Configure database connection:**
+   ```bash
+   rdst configure add-target mydb \
+     --host localhost \
+     --port 5432 \
+     --database myapp \
+     --user postgres
+   ```
+
+3. **Analyze queries:**
+   ```bash
+   # Analyze a specific query
+   rdst analyze "SELECT * FROM users WHERE active = true"
+
+   # With uvx:
+   uvx rdst analyze "SELECT * FROM users WHERE active = true"
+
+   # Analyze with Readyset cache evaluation
+   rdst analyze --readyset-cache "SELECT * FROM products ORDER BY created_at"
+   ```
+
+4. **Monitor slow queries:**
+   ```bash
+   rdst top
+   # Or: uvx rdst top
+   ```
+
+## Commands
+
+All commands can be run with `rdst` (if installed) or `uvx rdst` (no installation):
+
+- `rdst configure` - Manage database targets and connection profiles
+- `rdst analyze` - Analyze SQL queries and evaluate caching opportunities
+- `rdst top` - Live view of slow queries
+- `rdst tune` - Get query optimization suggestions
+- `rdst query` - Manage query registry
+- `rdst init` - First-time setup wizard
+- `rdst version` - Show version information
+
+**Example with uvx:**
+```bash
+uvx rdst analyze "SELECT * FROM orders WHERE status = 'pending'"
+```
+
+## Requirements
+
+- Python 3.11 or higher
+- PostgreSQL or MySQL database access
+
+## About Readyset
+
+Readyset is a SQL caching engine that sits between your application and database, automatically caching query results to improve performance. Learn more at [readyset.io](https://readyset.io).
+
+## Documentation
+
+- [Readyset Documentation](https://docs.readyset.io)
+- [GitHub Repository](https://github.com/readysettech/readyset)
+- [Report Issues](https://github.com/readysettech/readyset/issues)
+
+## License
+
+MIT License - see LICENSE file for details

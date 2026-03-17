@@ -1,0 +1,57 @@
+# Build artifacts
+build/
+dist/
+lib/web_dist/
+*.deb
+*.rpm
+*.rpm.al23
+*.pkg
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+ENV/
+env/
+
+# uv
+uv.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+_version_build.py
+storybook_output.html
+
+# Test artifacts
+.pytest_cache/
+test-results/
+*.egg-info/
+.coverage
+htmlcov/
+
+# E2E test credentials (developer-specific)
+tests/e2e/.env
+
+# Local config (don't commit user-specific configs)
+.rdst/
+
+# Claude Code local files (may contain API keys in settings)
+.claude/
+
+# Internal (not for public GitHub)
+.buildkite/
+tests/integration/run_tests_local.sh
+tests/integration/README.md
+docs/internal/

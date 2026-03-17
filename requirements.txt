@@ -1,0 +1,10 @@
+requests==2.31.0
+psycopg2-binary
+pymysql
+pandas
+rich
+toml
+pygments
+sqlparse
+pyyaml
+sqlglot

@@ -1,0 +1,98 @@
+[project]
+name = "rdst"
+dynamic = ["version"]
+description = "Readyset Data and SQL Toolkit - CLI tool for database diagnostics and query optimization"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Readyset", email = "support@readyset.io" }]
+keywords = [
+    "database",
+    "sql",
+    "optimization",
+    "readyset",
+    "diagnostics",
+    "performance",
+    "caching",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Topic :: Database",
+    "Topic :: Software Development :: Testing",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "boto3",
+    "requests==2.31.0",
+    "psycopg2-binary",
+    "pymysql",
+    "pandas",
+    "rich",
+    "toml",
+    "pygments",
+    "posthog",
+    "sqlparse",
+    "pyyaml",
+    "sqlglot",
+    "anthropic>=0.76.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "sse-starlette>=2.0.0",
+    "fastapi-ai-sdk>=0.1.0",
+    "keyring>=25.0.0",
+]
+
+[project.optional-dependencies]
+slack = [
+    "slack-bolt>=1.18.0",
+    "slack-sdk>=3.21.0",
+]
+agent = [
+    "aiohttp>=3.9.0",
+]
+
+[project.urls]
+Homepage = "https://readyset.io"
+Documentation = "https://docs.readyset.io"
+Repository = "https://github.com/readysettech/readyset"
+Issues = "https://github.com/readysettech/readyset/issues"
+Changelog = "https://github.com/readysettech/readyset/releases"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "_version_build.py"
+pattern = "__version__ = ['\"](?P<version>[^'\"]+)['\"]"
+
+[tool.hatch.build.targets.wheel]
+packages = ["lib"]
+exclude = [
+    "lib/ui/AGENTS.md",  # Symlink that breaks sdist->wheel build
+]
+
+[tool.hatch.build.targets.wheel.force-include]
+"rdst.py" = "rdst.py"
+"mcp_server.py" = "mcp_server.py"
+"lib/web_dist" = "lib/web_dist"
+
+[tool.hatch.build.targets.sdist.force-include]
+"lib/web_dist" = "lib/web_dist"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+]
+
+[project.scripts]
+rdst = "rdst:main"
+rdst-mcp = "mcp_server:main"
